@@ -6,7 +6,6 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-from PIL import Image
 from streamlit_folium import folium_static
 
 def app () :
@@ -124,86 +123,36 @@ def app () :
         missing_value_color = '#cccccc' # Light grey
         
         if selected_variable == "price/m2":
-           
+            display_map = maps_data_final.explore(column="price/m2", 
+                tooltip=["note", "price/m2"], 
+                popup=True, 
+                tiles="CartoDB positron",
+                legend=True,
+                legend_kwds=dict(textColor="white"), 
+                cmap=input_color_theme,
+                scheme="naturalbreaks",
+                k=20,
+                edgecolor = "0",
+                zoom_start=5,
+                missing_kwds={"color": missing_value_color, "label": "Missing values"})
+          
         
-        
-            plt.rcParams["figure.figsize"] = (50,50)
-            plt.rcParams["legend.markerscale"] = 5
-            missing_value_color = '#cccccc' # Light grey
-            plt.rc("legend", fontsize=40)
-
-            fig, ax = plt.subplots(1)
-
-            ax.axis('off')
-
-            ax.set_title("Price/m2 by postal code (in Euro)", fontdict={'fontsize': '100', 'fontweight': '10'},)
-
-            maps_data_final.plot(column="avg_rent",
-                                ax=ax,
-                                legend=True,
-                                legend_kwds={'loc': 2},
-                                scheme="natural_breaks",
-                                k=20,
-                                cmap = input_color_theme,
-                                edgecolor = "0",
-                                linewidth = 0.001,
-                                missing_kwds={"color": missing_value_color, "label": "Missing values"})
-
-            leg = ax.get_legend()
-            leg.set_bbox_to_anchor((-0.25, 1.00))
-
-            ax.annotate("Source: https://www.kaggle.com/datasets/corrieaar/apartment-rental-offers-in-germany/data", xy=(0.05, .05), xycoords='figure fraction', horizontalalignment='left', 
-                        verticalalignment='bottom', fontsize=25)
-            
-            plt.savefig("map.png")
-            
+            return display_map  
         else :
-                ### display_map = maps_data_final.explore(column="avg_rent", 
-                    #tooltip=["note", "avg_rent"],  
-                    #popup=True, 
-                    #tiles="CartoDB positron",
-                    #legend=True,
-                    #legend_kwds=dict(textColor="white"), 
-                    #cmap=input_color_theme,
-                    #scheme="naturalbreaks",
-                    #k=20,
-                    #edgecolor = "0",
-                    #zoom_start=5,
-                    #missing_kwds={"color": missing_value_color, "label": "Missing values"})
+                display_map = maps_data_final.explore(column="avg_rent", 
+                    tooltip=["note", "avg_rent"],  
+                    popup=True, 
+                    tiles="CartoDB positron",
+                    legend=True,
+                    legend_kwds=dict(textColor="white"), 
+                    cmap=input_color_theme,
+                    scheme="naturalbreaks",
+                    k=20,
+                    edgecolor = "0",
+                    zoom_start=5,
+                    missing_kwds={"color": missing_value_color, "label": "Missing values"})
             
-                #return display_map  
-                plt.rcParams["figure.figsize"] = (50,50)
-                plt.rcParams["legend.markerscale"] = 5
-                missing_value_color = '#cccccc' # Light grey
-                plt.rc("legend", fontsize=40)
-
-                fig, ax = plt.subplots(1)
-
-                ax.axis('off')
-
-                ax.set_title("Total Rent by postal code (in Euro)", fontdict={'fontsize': '100', 'fontweight': '10'},)
-
-                maps_data_final.plot(column="avg_rent",
-                                    ax=ax,
-                                    legend=True,
-                                    legend_kwds={'loc': 2},
-                                    scheme="natural_breaks",
-                                    k=20,
-                                    cmap = input_color_theme,
-                                    edgecolor = "0",
-                                    linewidth = 0.001,
-                                    missing_kwds={"color": missing_value_color, "label": "Missing values"})
-
-                leg = ax.get_legend()
-                leg.set_bbox_to_anchor((-0.25, 1.00))
-
-                ax.annotate("Source: https://www.kaggle.com/datasets/corrieaar/apartment-rental-offers-in-germany/data", xy=(0.05, .05), xycoords='figure fraction', horizontalalignment='left', 
-                            verticalalignment='bottom', fontsize=25)
-                
-                plt.savefig("map.png")        
-                #im = Image.open(r"./map.png")
-                
-        
+                return display_map  
 
             
     # Main Dashboard 
@@ -238,10 +187,9 @@ def app () :
                     }}
                     </style>
                     """, unsafe_allow_html=True)
-        make_choropleth(selected_color_theme, selected_variable)
+        germany_map = make_choropleth(selected_color_theme, selected_variable)
         
-        #folium_static(germany_map)
-        st.image('map.png')
+        folium_static(germany_map)
 
     with col2:        
         column_title = "Total Rent"
