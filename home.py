@@ -4,7 +4,6 @@ import pandas as pd
 import altair as alt
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from PIL import Image 
 import seaborn as sns
 import plotly.express as px
 from streamlit_folium import folium_static
