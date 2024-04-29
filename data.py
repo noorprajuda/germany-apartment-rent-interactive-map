@@ -7,7 +7,7 @@ import seaborn as sns
 def app () :
     st.title("**Dataframe**")
     
-    df = pd.read_excel("./raw_data/immo_data_clean.xlsx")
+    df = pd.read_excel("./immo_data_clean.xlsx")
     st.dataframe(df)
     st.write('''**Source**: [Kaggle dataset](https://www.kaggle.com/datasets/corrieaar/apartment-rental-offers-in-germany)''')
     
